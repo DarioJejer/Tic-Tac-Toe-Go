@@ -1,15 +1,31 @@
 package main
 
 import (
-	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 )
 
+func homePage(w http.ResponseWriter, r *http.Request) {
+	renderTemplate(w, "index.html")
+}
+
+func renderTemplate(w http.ResponseWriter, page string) {
+	t, err := template.ParseFiles(page)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	err = t.Execute(w, nil)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+}
+
 func main() {
-	http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(rw, "Hello world")
-	})
+	http.HandleFunc("/", homePage)
 	log.Println("Starting web server on port 8080")
 	http.ListenAndServe(":8080", nil)
 }
