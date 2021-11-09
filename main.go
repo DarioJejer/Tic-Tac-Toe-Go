@@ -26,6 +26,8 @@ func renderTemplate(w http.ResponseWriter, page string) {
 }
 
 func playRound(rw http.ResponseWriter, r *http.Request) {
+
+	// the endpoint will take a board as an input and return whether if there is a winner an a message
 	board := r.URL.Query().Get("board")
 	result := utils.PlayRound(board)
 

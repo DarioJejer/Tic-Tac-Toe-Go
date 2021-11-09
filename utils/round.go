@@ -16,6 +16,18 @@ const (
 
 var MESSAGES = []string{"Keep playing", "You won", "Game over"}
 
+// the board string will be formated as follow
+
+// board = "001020100"
+
+// 0 0 1
+// 0 2 0
+// 1 0 0
+
+// where 0 is an empty position
+// 1 is a player move
+// 0 is a computer move
+
 func PlayRound(board string) Result {
 	finnished, winner := checkWinner(board)
 	message := MESSAGES[winner]
