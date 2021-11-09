@@ -1,5 +1,9 @@
 package utils
 
+import (
+	"strconv"
+)
+
 type Result struct {
 	Message   string `json: message`
 	Finnished bool   `json: finnish`
@@ -13,7 +17,7 @@ const (
 var MESSAGES = []string{"Keep playing", "You won", "Game over"}
 
 func PlayRound(buttonsSelected string) Result {
-	finnished, winner := determineWinner(buttonsSelected)
+	finnished, winner := checkWinner(buttonsSelected)
 	message := MESSAGES[winner]
 
 	var result Result
@@ -22,6 +26,32 @@ func PlayRound(buttonsSelected string) Result {
 	return result
 }
 
-func determineWinner(buttonsSelected string) (bool, int) {
+func checkWinner(buttonsSelected string) (bool, int) {
+
+	for i := 0; i < 3; i++ {
+		// check rows
+		if (buttonsSelected[3*i] == buttonsSelected[3*i+1]) == (buttonsSelected[3*i+1] == buttonsSelected[3*i+2]) {
+			return determineWinner(buttonsSelected[i])
+		}
+		// check columns
+		if (buttonsSelected[i] == buttonsSelected[i+3]) == (buttonsSelected[i+3] == buttonsSelected[i+6]) {
+			return determineWinner(buttonsSelected[i])
+		}
+	}
+	// check diagonals
+	if (buttonsSelected[0] == buttonsSelected[4]) == (buttonsSelected[4] == buttonsSelected[8]) {
+		return determineWinner(buttonsSelected[0])
+	}
+	if (buttonsSelected[2] == buttonsSelected[4]) == (buttonsSelected[4] == buttonsSelected[6]) {
+		return determineWinner(buttonsSelected[2])
+	}
+	return false, 0
+}
+
+func determineWinner(buttonSelected byte) (bool, int) {
+	if buttonSelected != '0' {
+		winner, _ := strconv.Atoi(string(buttonSelected))
+		return true, winner
+	}
 	return false, 0
 }
