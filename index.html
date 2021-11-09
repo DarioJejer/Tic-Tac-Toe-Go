@@ -41,7 +41,7 @@
         markButton(button, "x");
         computerMove();    
         var board = getBoard(); 
-        fetch("/playRound?buttonsSelected=" + board)
+        fetch("/playRound?board=" + board)
         .then(response => response.json())
         .then(data => {
             document.getElementById("message").innerHTML = data.message;

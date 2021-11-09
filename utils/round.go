@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"log"
 	"strconv"
 )
 
@@ -17,8 +16,8 @@ const (
 
 var MESSAGES = []string{"Keep playing", "You won", "Game over"}
 
-func PlayRound(buttonsSelected string) Result {
-	finnished, winner := checkWinner(buttonsSelected)
+func PlayRound(board string) Result {
+	finnished, winner := checkWinner(board)
 	message := MESSAGES[winner]
 
 	var result Result
@@ -27,31 +26,29 @@ func PlayRound(buttonsSelected string) Result {
 	return result
 }
 
-func checkWinner(buttonsSelected string) (bool, int) {
+func checkWinner(board string) (bool, int) {
 
 	for i := 0; i < 3; i++ {
 		// check rows
-		log.Println(buttonsSelected[3*i], buttonsSelected[3*i+1], buttonsSelected[3*i+2])
-		if buttonsSelected[3*i] != '0' && (buttonsSelected[3*i] == buttonsSelected[3*i+1]) && (buttonsSelected[3*i+1] == buttonsSelected[3*i+2]) {
-			return determineWinner(buttonsSelected[3*i])
+		if board[3*i] != '0' && (board[3*i] == board[3*i+1]) && (board[3*i+1] == board[3*i+2]) {
+			return determineWinner(board[3*i])
 		}
 		// check columns
-		if buttonsSelected[i] != '0' && (buttonsSelected[i] == buttonsSelected[i+3]) && (buttonsSelected[i+3] == buttonsSelected[i+6]) {
-			return determineWinner(buttonsSelected[i])
+		if board[i] != '0' && (board[i] == board[i+3]) && (board[i+3] == board[i+6]) {
+			return determineWinner(board[i])
 		}
-		log.Println(i)
 	}
 	// check diagonals
-	if buttonsSelected[0] != '0' && (buttonsSelected[0] == buttonsSelected[4]) && (buttonsSelected[4] == buttonsSelected[8]) {
-		return determineWinner(buttonsSelected[0])
+	if board[0] != '0' && (board[0] == board[4]) && (board[4] == board[8]) {
+		return determineWinner(board[0])
 	}
-	if buttonsSelected[2] != '0' && (buttonsSelected[2] == buttonsSelected[4]) && (buttonsSelected[4] == buttonsSelected[6]) {
-		return determineWinner(buttonsSelected[2])
+	if board[2] != '0' && (board[2] == board[4]) && (board[4] == board[6]) {
+		return determineWinner(board[2])
 	}
 	return false, 0
 }
 
-func determineWinner(buttonSelected byte) (bool, int) {
-	winner, _ := strconv.Atoi(string(buttonSelected))
+func determineWinner(button byte) (bool, int) {
+	winner, _ := strconv.Atoi(string(button))
 	return true, winner
 }

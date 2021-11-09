@@ -18,7 +18,6 @@ func renderTemplate(w http.ResponseWriter, page string) {
 		log.Println(err)
 		return
 	}
-
 	err = t.Execute(w, nil)
 	if err != nil {
 		log.Println(err)
@@ -27,9 +26,8 @@ func renderTemplate(w http.ResponseWriter, page string) {
 }
 
 func playRound(rw http.ResponseWriter, r *http.Request) {
-	buttonsSelected := r.URL.Query().Get("buttonsSelected")
-	log.Println(buttonsSelected)
-	result := utils.PlayRound(buttonsSelected)
+	board := r.URL.Query().Get("board")
+	result := utils.PlayRound(board)
 
 	out, err := json.MarshalIndent(result, "", "    ")
 	if err != nil {
