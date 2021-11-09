@@ -12,22 +12,83 @@
         <h1 class="mt-4">Tic Tac Toe</h1>
         <hr>
         
-        <button class="btn btn-outline-secondary" onclick="choose(0)">&nbsp;</button>
-        <button class="btn btn-outline-secondary" onclick="choose(1)">&nbsp;</button>
-        <button class="btn btn-outline-secondary" onclick="choose(2)">&nbsp;</button>
+        <button id="button0" class="btn btn-outline-secondary" onclick="choose(0)">&nbsp;</button>
+        <button id="button1" class="btn btn-outline-secondary" onclick="choose(1)">&nbsp;</button>
+        <button id="button2" class="btn btn-outline-secondary" onclick="choose(2)">&nbsp;</button>
         <br>
         <br>
-        <button class="btn btn-outline-secondary" onclick="choose(0)">&nbsp;</button>
-        <button class="btn btn-outline-secondary" onclick="choose(1)">&nbsp;</button>
-        <button class="btn btn-outline-secondary" onclick="choose(2)">&nbsp;</button>
+        <button id="button3" class="btn btn-outline-secondary" onclick="choose(3)">&nbsp;</button>
+        <button id="button4" class="btn btn-outline-secondary" onclick="choose(4)">&nbsp;</button>
+        <button id="button5" class="btn btn-outline-secondary" onclick="choose(5)">&nbsp;</button>
         <br>
         <br>    
-        <button class="btn btn-outline-secondary" onclick="choose(0)">&nbsp;</button>
-        <button class="btn btn-outline-secondary" onclick="choose(1)">&nbsp;</button>
-        <button class="btn btn-outline-secondary" onclick="choose(2)">&nbsp;</button>
+        <button id="button6" class="btn btn-outline-secondary" onclick="choose(6)">&nbsp;</button>
+        <button id="button7" class="btn btn-outline-secondary" onclick="choose(7)">&nbsp;</button>
+        <button id="button8" class="btn btn-outline-secondary" onclick="choose(8)">&nbsp;</button>
         <br>    
         <br>    
 
-        <p>Select a position!</p>
+        <p id="message">Select a position!</p>
     </div>
+</body>
+<script>
+    function choose(optionSelected) {
+        var button = document.getElementById("button" + optionSelected);
+        if(button.classList.contains("btn-outline-danger")) {
+            document.getElementById("message").innerHTML = "Already selected position";
+            return;
+        }
+        markButton(button, "x");
+        computerMove();    
+        var board = getBoard(); 
+        fetch("/playRound?buttonsSelected=" + board)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("message").innerHTML = data.message;
+            if(data.finnished){                
+                resetBoard();          
+            }
+        })
+    }
+
+    function computerMove() {
+        var buttons = [...document.getElementsByTagName("button")].filter(b => b.innerHTML.includes("&nbsp;"));
+        markButton(buttons[Math.floor(Math.random() * buttons.length)], "o");
+    }
+
+    function markButton(button, content) {
+        button.innerHTML = content;
+        button.classList.add('btn-outline-danger');
+        button.classList.remove('btn-outline-secondary');
+    }
+
+    function getBoard() {
+        var board = "";
+        var buttons = document.getElementsByClassName("btn");
+        for (var i = 0; i < buttons.length; i++) {
+            var content = buttons.item(i).innerHTML;
+            switch (content) {
+                case "x":
+                    board += 1;
+                    break;
+                case "o":
+                    board += 2;
+                    break;
+                default:
+                    board += 0;
+                    break;
+            }            
+        }   
+        return board;
+    }
+
+    function resetBoard() {
+        var buttons = document.getElementsByClassName("btn");
+        for (var i = 0; i < buttons.length; i++) {                    
+            buttons[i].innerHTML = "&nbsp;";                    
+            buttons[i].classList.add('btn-outline-secondary');
+            buttons[i].classList.remove('btn-outline-danger');
+        }  
+    }
+</script>
 </html>
